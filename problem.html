@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Sales Simulation</title>
+    <style>
+ body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    background-color: #f9f9f9; 
+}
+
+.container {
+    max-width: 400px;
+    padding: 20px;
+    border: 4px solid #868484;
+    border-radius: 8px;
+    box-shadow: 2px solid #868484;
+    background-color: #fd9090; 
+}
+
+.container label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.container input {
+    width: 100%;
+    padding: 8px;
+    border: 3px solid #868484; 
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.container button {
+    width: 100%;
+    padding: 10px;
+    border: 3px solid #868484; 
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    font-weight: bold; 
+}
+
+.container button:hover {
+    background-color: #fb8585;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Weekly Sales Simulation</h2>
+        
+        <label for="min">Minimum Value (a):</label>
+        <input type="number" id="min" placeholder="e.g., Enter Value" required>
+        
+        <label for="max">Maximum Value (b):</label>
+        <input type="number" id="max" placeholder="e.g., Enter Value" required>
+        
+        <label for="peak">Peak Value (c):</label>
+        <input type="number" id="peak" placeholder="e.g., Enter Value" required>
+
+        <button onclick="simulate()">Run Simulation</button>
+
+        <h3 id="result"></h3>
+    </div>
+
+    <script>
+        function triangularRandom(a, b, c) {
+            const F = (c - a) / (b - a);
+            const rand = Math.random();
+            
+            if (rand < F) {
+                return a + Math.sqrt(rand * (b - a) * (c - a));
+            } else {
+                return b - Math.sqrt((1 - rand) * (b - a) * (b - c));
+            }
+        }
+
+        function simulate() {
+            const min = parseFloat(document.getElementById('min').value);
+            const max = parseFloat(document.getElementById('max').value);
+            const peak = parseFloat(document.getElementById('peak').value);
+            const threshold = 2000;
+            const numSimulations = 100000;
+            let countBelowThreshold = 0;
+
+            for (let i = 0; i < numSimulations; i++) {
+                const sales = triangularRandom(min, max, peak);
+                if (sales < threshold) {
+                    countBelowThreshold++;
+                }
+            }
+
+            const probability = (countBelowThreshold / numSimulations) * 100;
+            document.getElementById('result').innerText = `Probability of sales < $2000: ${probability.toFixed(2)}%`;
+        }
+    </script>
+
+</body>
+</html>
